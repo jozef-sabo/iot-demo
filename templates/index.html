@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Counter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+</head>
+
+<script src="https://cdn.socket.io/4.8.1/socket.io.min.js" integrity="sha384-mkQ3/7FUtcGyoppY6bz/PORYoGqOl7/aSUMn2ymDOJcapfS6PHqxhRTMh1RR0Q6+" crossorigin="anonymous"></script>
+<body>
+
+<div class="center">
+    <p style="font-size: 32em" id="clicks"> {{ clicks }} </p>
+</div>
+
+
+</body>
+<script>
+    function setup_sockets(address) {
+        let socket = io.connect(address)
+
+        socket.on("connect", function () {
+            socket.send("User connected!")
+        })
+
+        socket.on("command", function (data) {
+            if(data["command"] === "update") {
+                document.getElementById("clicks").textContent = data["clicks"]
+            }
+        })
+    }
+
+    setup_sockets("https://ingenium.sbo.sk")
+
+</script>
+
+</html>
